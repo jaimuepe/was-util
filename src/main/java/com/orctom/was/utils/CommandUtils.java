@@ -9,6 +9,7 @@ import com.orctom.was.model.WebSphereModel;
 import com.orctom.was.model.WebSphereServiceException;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -47,9 +48,11 @@ public class CommandUtils {
   }
 
   public static File getBuildScript(String task, String defaultTemplate, WebSphereModel model, String workingDir, String ext) throws IOException {
-    String template = getScriptTemplate(defaultTemplate, model, workingDir);
-    MustacheFactory mf = new DefaultMustacheFactory();
-    Mustache mustache = mf.compile(template);
+	  
+	String template = getScriptTemplate(defaultTemplate, model, workingDir);
+	MustacheFactory mf = new DefaultMustacheFactory();
+	File f = new File(template);
+	Mustache mustache = mf.compile(new InputStreamReader(new FileInputStream(f), Charset.forName("UTF-8")), f.getName());
 
     StringBuilder buildFile = new StringBuilder(50);
     buildFile.append(task);
